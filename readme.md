@@ -1,7 +1,3 @@
-# Laravel XML
+# OAuth2 XML (For Laravel)
 
-Adds some missing XML features to Laravel.
-* Response::xml() for providing XML response output.
-* Encode and decode XML
-
-Much of the code for this is adapted from https://github.com/laravelbook/framework
+Add-on package for https://github.com/lucadegasperi/oauth2-server-laravel which can provide an XML response. This package was developed because of a specific use-case where a client was not able to use json for api interaction at all. It is probably not useful unless you have the exact same use-case.
