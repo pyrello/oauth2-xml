@@ -14,13 +14,14 @@ class AuthorizationServerProxy extends ServerProxy
      *
      * @var string
      */
-    protected $type = 'json';
+    protected $reponseType = 'json';
 
     public function __construct(Authorization $authServer)
     {
+        \Log::debug('constructing AuthServer...');
         parent::__construct($authServer);
-        if (null !== Input::get('type')) {
-            $this->type = Input::get('type');
+        if (null !== Input::get('response_type')) {
+            $this->reponseType = Input::get('response_type');
         }
     }
 
@@ -31,7 +32,8 @@ class AuthorizationServerProxy extends ServerProxy
      */
     public function performAccessTokenFlow()
     {
-        $code = 200;
+        $status = 200;
+        $headers = [];
 
         try {
 
@@ -51,8 +53,8 @@ class AuthorizationServerProxy extends ServerProxy
 
             // make this better in order to return the correct headers via the response object
             $error = $this->authServer->getExceptionType($e->getCode());
+            $status = self::$exceptionHttpStatusCodes[$error];
             $headers = $this->authServer->getExceptionHttpHeaders($error);
-            return Response::json($response, self::$exceptionHttpStatusCodes[$error], $headers);
 
         } catch (Exception $e) {
 
@@ -62,14 +64,13 @@ class AuthorizationServerProxy extends ServerProxy
                 'error_description' => $e->getMessage()
             );
 
-            $code = 500;
+            $status = 500;
         }
 
-        if ($this->type === 'xml') {
-            Response::make(convert_array_to_xml($response), $code)
-                ->header('Content-Type', 'text/xml');
+        if ($this->reponseType === 'xml') {
+            Response::xml($response, $status, $headers);
         }
 
-        return Response::json($response);
+        return Response::json($response, $status, $headers);
     }
 } 

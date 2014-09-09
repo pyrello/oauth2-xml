@@ -1,6 +1,7 @@
 <?php namespace Pyrello\OAuth2Xml;
 
 use Illuminate\Support\ServiceProvider;
+use LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider;
 
 class OAuth2XmlServiceProvider extends ServiceProvider
 {
@@ -19,35 +20,7 @@ class OAuth2XmlServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->package('pyrello/oauth2-xml', 'lucadegasperi/oauth2-server-laravel');
-
-        /** @var \Illuminate\Routing\Router $router */
-        $router = $this->app['router'];
-
-        // Bind a filter to check if the auth code grant type params are provided
-        $router->filter('check-authorization-params', 'LucaDegasperi\OAuth2Server\Filters\CheckAuthorizationParamsFilter');
-
-        // Bind a filter to make sure that an endpoint is accessible only by authorized members eventually with specific scopes
-        $router->filter('oauth', 'LucaDegasperi\OAuth2Server\Filters\OAuthFilter');
-
-        // Bind a filter to make sure that an endpoint is accessible only by a specific owner
-        $router->filter('oauth-owner', 'LucaDegasperi\OAuth2Server\Filters\OAuthOwnerFilter');
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // let's bind the interfaces to the implementations
         $app = $this->app;
-
-        $app->bind('League\OAuth2\Server\Storage\ClientInterface', 'LucaDegasperi\OAuth2Server\Repositories\FluentClient');
-        $app->bind('League\OAuth2\Server\Storage\ScopeInterface', 'LucaDegasperi\OAuth2Server\Repositories\FluentScope');
-        $app->bind('League\OAuth2\Server\Storage\SessionInterface', 'LucaDegasperi\OAuth2Server\Repositories\FluentSession');
-        $app->bind('LucaDegasperi\OAuth2Server\Repositories\SessionManagementInterface', 'LucaDegasperi\OAuth2Server\Repositories\FluentSession');
 
         $app['oauth2.authorization-server'] = $app->share(function ($app) {
 
@@ -88,29 +61,11 @@ class OAuth2XmlServiceProvider extends ServiceProvider
             return new AuthorizationServerProxy($server);
 
         });
-
-        $app['oauth2.resource-server'] = $app->share(function ($app) {
-
-            $server = $app->make('League\OAuth2\Server\Resource');
-
-            return $server;
-
-        });
-
-        $app['oauth2.expired-tokens-command'] = $app->share(function ($app) {
-            return $app->make('LucaDegasperi\OAuth2Server\Commands\ExpiredTokensCommand');
-        });
-
-        $this->commands('oauth2.expired-tokens-command');
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
+    public function register()
     {
-        return array('oauth2.authorization-server', 'oauth2.resource-server');
+        //
     }
+
 }
