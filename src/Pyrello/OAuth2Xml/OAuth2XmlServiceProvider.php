@@ -3,7 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider;
 
-class OAuth2XmlServiceProvider extends ServiceProvider
+class OAuth2XmlServiceProvider extends OAuth2ServerServiceProvider
 {
 
     /**
@@ -20,13 +20,18 @@ class OAuth2XmlServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->package('pyrello/oauth2-xml', 'lucadegasperi/oauth2-server-laravel');
+    }
+
+    public function register()
+    {
         $app = $this->app;
 
         $app['pearson.authorization-server'] = $app->share(function ($app) {
 
             $server = $app->make('League\OAuth2\Server\Authorization');
 
-            $config = $app['config']->get('lucadegasperi\oauth2-server-laravel::oauth2');
+            $config = $app['config']->get('pyrello/oauth2-xml::oauth2');
 
             // add the supported grant types to the authorization server
             foreach ($config['grant_types'] as $grantKey => $grantValue) {
@@ -61,11 +66,6 @@ class OAuth2XmlServiceProvider extends ServiceProvider
             return new AuthorizationServerProxy($server);
 
         });
-    }
-
-    public function register()
-    {
-
     }
 
 }
