@@ -22,11 +22,11 @@ class OAuth2XmlServiceProvider extends ServiceProvider
     {
         $app = $this->app;
 
-        $app['oauth2.authorization-server'] = $app->share(function ($app) {
+        $app['pearson.authorization-server'] = $app->share(function ($app) {
 
             $server = $app->make('League\OAuth2\Server\Authorization');
 
-            $config = $app['config']->get('lucadegasperi/oauth2-server-laravel::oauth2');
+            $config = $app['config']->get('lucadegasperi\oauth2-server-laravel::oauth2');
 
             // add the supported grant types to the authorization server
             foreach ($config['grant_types'] as $grantKey => $grantValue) {
@@ -65,7 +65,7 @@ class OAuth2XmlServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+
     }
 
 }

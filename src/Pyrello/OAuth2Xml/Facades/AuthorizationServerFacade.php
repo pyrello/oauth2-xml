@@ -13,6 +13,6 @@ class AuthorizationServerFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'oauth2.authorization-server';
+        return 'pearson.authorization-server';
     }
 }
