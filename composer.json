@@ -1,0 +1,22 @@
+{
+    "name": "pyrello/oauth2-xml",
+    "description": "",
+    "authors": [
+        {
+            "name": "Sean Adams-Hiett",
+            "email": "pyrello@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
+        "lucadegasperi/oauth2-server-laravel": "1.0.x",
+        "pyrello/laravel-xml": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Pyrello\\OAuth2Xml": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
