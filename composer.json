@@ -1,6 +1,7 @@
 {
     "name": "pyrello/oauth2-xml",
-    "description": "",
+    "description": "Add-on package to allow OAuth authentication responses using XML.",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sean Adams-Hiett",
