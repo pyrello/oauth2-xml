@@ -14,14 +14,13 @@ class AuthorizationServerProxy extends ServerProxy
      *
      * @var string
      */
-    protected $reponseType = 'json';
+    protected $responseType = 'json';
 
     public function __construct(Authorization $authServer)
     {
-        \Log::debug('constructing AuthServer...');
         parent::__construct($authServer);
-        if (null !== Input::get('response_type')) {
-            $this->reponseType = Input::get('response_type');
+        if (null !== Input::get('format')) {
+            $this->responseType = Input::get('format');
         }
     }
 
@@ -67,8 +66,8 @@ class AuthorizationServerProxy extends ServerProxy
             $status = 500;
         }
 
-        if ($this->reponseType === 'xml') {
-            Response::xml($response, $status, $headers);
+        if ($this->responseType === 'xml') {
+            return Response::xml($response, $status, $headers);
         }
 
         return Response::json($response, $status, $headers);
